@@ -5,8 +5,9 @@ class SQLiteDatabase:
     def __init__(self):
         self.connection = sqlite3.connect('trades.db')
         self.c = self.connection.cursor()
+        self.create_trades_table()
 
-    trade_column_names = ["id", "counterparty", "base_asset", "asset", "risk_pct", 
+    trade_column_names = ["id", "counterparty", "base_asset", "asset", "long_short", "risk_pct", 
                         "risk_amount", "open_date", "price", "quantity", "cost", "close_date", 
                         "exit_price", "exit_total", "profit_loss", "pct_gain_loss", "strategy"]
 
@@ -16,6 +17,7 @@ class SQLiteDatabase:
                     counterparty VARCHAR(255) NOT NULL,
                     base_asset VARCHAR(255) NOT NULL,
                     asset VARCHAR(255) NOT NULL,
+                    long_short INTEGER NOT NULL,
                     risk_pct FLOAT NOT NULL,
                     risk_amount FLOAT NOT NULL,
                     open_date TEXT NOT NULL,
@@ -31,17 +33,14 @@ class SQLiteDatabase:
                     );''')    
 
     def add_item(self, item_dict):
-        query = '''
-        INSERT INTO trades ("counterparty", "base_asset", "asset", 
+        query = '''INSERT INTO trades ("counterparty", "base_asset", "asset", "long_short", 
         "risk_pct", "risk_amount", "open_date", "price", "quantity", "cost", "close_date", 
         "exit_price", "exit_total", "profit_loss", "pct_gain_loss", "strategy") 
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'''
-
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'''
         if [*item_dict] != SQLiteDatabase.trade_column_names[1:]:
             print([*item_dict])
             print(SQLiteDatabase.trade_column_names[1:])
             raise Exception('Item dict keys doesnt match database column names')
-            
         else:
             values_list = list(item_dict.values())
         self.c.execute(query, (values_list))
@@ -84,14 +83,9 @@ class SQLiteDatabase:
         self.c.execute(query)
 
 item = {"counterparty": 'Binance', "base_asset": 'USDT', "asset": 'BTC', "risk_pct": 3, 
-        "risk_amount": 100, "open_date": '18/03/2021', "price": 55000, "quantity": 0.1, 
+        "risk_amount": 100, "long_short": 'Long', "open_date": '18/03/2021', "price": 55000, "quantity": 0.1, 
         "cost": 5500, "close_date": '23/03/2021', 'exit_price': 57000, 'exit_total': 5700, 
         "profit_loss": 200, "pct_gain_loss": 3.64, "strategy": 'basic'}
 
 my_db = SQLiteDatabase()
-my_db.create_trades_table()
-my_db.add_item(item)
-my_db.print_all_rows()
-my_db.get_todays_trades()
-my_db.delete_all()
 my_db.print_all_rows()
