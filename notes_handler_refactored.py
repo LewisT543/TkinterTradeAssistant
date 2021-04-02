@@ -1,5 +1,6 @@
 
 
+# NoteHandler class used to get, set and validate the contents of the MyNotes section on the mainwindow.
 class NoteHandler:
     def __init__(self):
         self.notes_file = 'notes.txt'
