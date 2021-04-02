@@ -175,11 +175,13 @@ class PositionSizingDisplay(tk.Frame):
         self.parent = parent
         tk.Frame.__init__(self)
         self.main = tk.Toplevel(parent)
-        self.main.geometry('420x200')
+        self.main.geometry('420x220')
         self.main.title('Position Size Calculator')
         self.main.protocol('WM_DELETE_WINDOW', self.on_closing)
         f = tk.Frame(self.main)
         f.pack(fill=tk.BOTH, expand=1)
+        self.entries_frame = tk.LabelFrame(f, text='Enter Trade Details')
+        self.entries_frame.place(x=0, y=0)
         self.trace_vars = {}
         self.entries = {}
         self.entry_labels = {}
@@ -187,16 +189,16 @@ class PositionSizingDisplay(tk.Frame):
                     'LongTP': (4, 1), 'LongSL': (5, 1), 'ShortTP': (4, 3), 'ShortSL': (5, 3)}
         font = ('Ariel', 14)
 
-        self.calc_button = tk.Button(f, text='Calculate Fields', command=self.calculate)
+        self.calc_button = tk.Button(self.entries_frame, text='Calculate Fields', command=self.calculate)
         self.calc_button.grid(row=3, column=2, padx=10, pady=10)
         for entry in inputs:
             self.trace_vars[entry] = tk.StringVar() 
             self.trace_vars[entry].trace_add('write', self.validate_entry)
             vcmd = (self.register(self.validate_entry))
-            self.entries[entry] = tk.Entry(f, textvariable=self.trace_vars[entry], width=8, font=font, 
+            self.entries[entry] = tk.Entry(self.entries_frame, textvariable=self.trace_vars[entry], width=8, font=font, 
                                             validate='all', validatecommand=(vcmd, '%P'))
             self.entries[entry].grid(row=inputs[entry][0], column=inputs[entry][1] + 1, padx=5, pady=5)
-            self.entry_labels[entry] = tk.Label(f, text=entry, font=font)
+            self.entry_labels[entry] = tk.Label(self.entries_frame, text=entry, font=font)
             self.entry_labels[entry].grid(row=inputs[entry][0], column=inputs[entry][1], padx=5, pady=5)
      
     def on_closing(self):
@@ -217,4 +219,4 @@ class PositionSizingDisplay(tk.Frame):
             get_fields[entry] = self.trace_vars[entry].get()
         return
 
-    
+
