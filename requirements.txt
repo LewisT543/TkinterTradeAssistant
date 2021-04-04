@@ -1,0 +1,6 @@
+tkinter
+tkinter.messabox
+pandas
+dateutil.parser | parse 
+pandastable | Table, TableModel
+

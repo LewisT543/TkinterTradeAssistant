@@ -39,7 +39,6 @@ class PopUpBlueprint(tk.Frame):
     def validate_geometry(geometry_string):
         try:
             str_list = geometry_string.split(sep='x', maxsplit=1)
-            print(str_list)
             for str in str_list:
                 if 2 < len(str) < 5 and str.isdigit():
                     continue
@@ -61,7 +60,7 @@ class PopUpBlueprint(tk.Frame):
 # Trades Window display
 class MyTradesWindow(PopUpBlueprint):
     def __init__(self, parent=None, dataframe=None, geometry=None, title=None):
-        super.__init__(parent)
+        super().__init__(parent)
         self.df = dataframe
         self.setup_popup(geometry, title)
         self.table = pt = Table(self.main_frame, dataframe=self.df, showtoolbar=True, showstatusbar=True)
@@ -71,7 +70,7 @@ class MyTradesWindow(PopUpBlueprint):
 # Add Trade Window display
 class AddTradeWindow(PopUpBlueprint):
     def __init__(self, parent=None, entries_list=None, db_con=None, geometry=None, title=None):
-        super.__init__(parent)
+        super().__init__(parent)
         self.entries_list = entries_list
         self.db_con = db_con
         self.setup_popup(geometry, title)
@@ -205,7 +204,7 @@ class AddTradeWindow(PopUpBlueprint):
             return True
     
     # Callback command for long_short 'w' Tracer, normalises representations of long/short. Using *args to unpack all arguments sent
-    # by the event handler. Not that we actually use them. *args = [x, y, event_widget, z]
+    # by the event handler. Not that we actually use them. *args = [?, ?, event_widget, ?]... I think
     def format_long_short(self, *args):
         if self.stringvars['long_short'].get() in ['1', 'long', 'l', 'Long']:
             self.stringvars['long_short'].set('Long')
@@ -220,7 +219,7 @@ class PositionSizingWindow(PopUpBlueprint):
     font = ('Ariel', 14)
 
     def __init__(self, parent=None, geometry=None, title=None):
-        super.__init__(parent)
+        super().__init__(parent)
         self.setup_popup(geometry, title)
         self.vars_entries_labels_setup()
 
@@ -271,4 +270,39 @@ class PositionSizingWindow(PopUpBlueprint):
             return False
 
     
+class TextExtension( tk.Frame ):
+    """Extends Frame.  Intended as a container for a Text field.  Better related data handling
+    and has Y scrollbar now."""
+    # Imported from StackOverflow: 
+    def __init__(self, master, textvariable = None, *args, **kwargs):
+        self.textvariable = textvariable
+        if (textvariable is not None):
+            if not (isinstance(textvariable, tk.Variable)):
+                raise TypeError("tk.Variable type expected, {} given.".format(type(textvariable)))
+            self.textvariable.get = self.GetText
+            self.textvariable.set = self.SetText
 
+        self.YScrollbar = None
+        self.Text = None
+        super().__init__(master)
+        self.YScrollbar = tk.Scrollbar(self, orient = tk.VERTICAL)
+        self.Text = tk.Text(self, yscrollcommand = self.YScrollbar.set, *args, **kwargs)
+        self.YScrollbar.config(command = self.Text.yview)
+        self.YScrollbar.pack(side = tk.RIGHT, fill = tk.Y)
+        self.Text.pack(side = tk.LEFT, fill = tk.BOTH, expand = 1)
+
+    def Clear(self):
+        self.Text.delete(1.0, tk.END)
+
+    def GetText(self):
+        text = self.Text.get(1.0, tk.END)
+        if (text is not None):
+            text = text.strip()
+        if (text == ""):
+            text = None
+        return text
+
+    def SetText(self, value):
+        self.Clear()
+        if (value is not None):
+            self.Text.insert(tk.END, value.strip())

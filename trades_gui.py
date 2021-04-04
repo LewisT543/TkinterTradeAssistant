@@ -20,7 +20,7 @@ class TradesWindow:
         self.database = SQLiteDatabase()
         # Setup csv_handler for notes, creating 'notes.csv' if absent
         self.note_handler = NotesHandler()
-        self.note_handler.get_notes_from_csv()
+        
         # Setup tk.Toplevel window variables
         self.show_trades_window = None
         self.add_trade_window = None
