@@ -1,6 +1,6 @@
 tkinter
-tkinter.messabox
+tkinter.messagebox
 pandas
 dateutil.parser | parse 
-pandastable | Table, TableModel
+pandastable | Table
 

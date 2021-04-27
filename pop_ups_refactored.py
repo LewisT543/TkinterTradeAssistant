@@ -1,10 +1,9 @@
 # Base imports for all pop_up Classes
 import tkinter as tk
 from tkinter import messagebox
-from tkinter.ttk import Separator
 
 # Pandastable for displaying database contents (ShowTradesDisplay)
-from pandastable import Table, TableModel
+from pandastable import Table
 
 # Dateparser for (AddTradeDisplay)
 from dateutil.parser import parse
@@ -24,7 +23,7 @@ class PopUpBlueprint(tk.Frame):
 
     # Callback designed to show/hide a hidden/shown widget on clicking the 'X' button. Also destroys the window.
     def on_closing(self):
-        self.is_showing = not self.is_showing
+        self.is_showing = False
         self.window.destroy()
 
     # Validate and Set Geometry and title for popup
@@ -279,8 +278,8 @@ class TextExtension( tk.Frame ):
         if (textvariable is not None):
             if not (isinstance(textvariable, tk.Variable)):
                 raise TypeError("tk.Variable type expected, {} given.".format(type(textvariable)))
-            self.textvariable.get = self.GetText
-            self.textvariable.set = self.SetText
+            self.textvariable.get = self.get_text
+            self.textvariable.set = self.set_text
 
         self.YScrollbar = None
         self.Text = None
@@ -291,10 +290,10 @@ class TextExtension( tk.Frame ):
         self.YScrollbar.pack(side = tk.RIGHT, fill = tk.Y)
         self.Text.pack(side = tk.LEFT, fill = tk.BOTH, expand = 1)
 
-    def Clear(self):
+    def clear(self):
         self.Text.delete(1.0, tk.END)
 
-    def GetText(self):
+    def get_text(self):
         text = self.Text.get(1.0, tk.END)
         if (text is not None):
             text = text.strip()
@@ -302,7 +301,7 @@ class TextExtension( tk.Frame ):
             text = None
         return text
 
-    def SetText(self, value):
-        self.Clear()
+    def set_text(self, value):
+        self.clear()
         if (value is not None):
             self.Text.insert(tk.END, value.strip())

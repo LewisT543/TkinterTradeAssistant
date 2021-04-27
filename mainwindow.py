@@ -1,6 +1,5 @@
 # Libraries
 import tkinter as tk
-from tkinter import messagebox
 import pandas as pd
 
 # Local imports
@@ -9,16 +8,22 @@ from notes_handler_refactored import NoteHandler
 from pop_ups_refactored import *
 
 geometry = (600, 600)
-
 window = tk.Tk()
 window.title('My Trade Hub')
 window.geometry(f'{geometry[0]}x{geometry[1]}')
 
 class MainWindow:
     def __init__(self, parent):
-        self.menu_buttons = {'1). Show Trades': lambda: self.show_my_trades_window(parent), '2). Add Trade': None, '3). Search Trades': None, 
-                    '4). Position Size Calc.': None, '5). extra_button_2': None,'6). extra_button_3': None, 
-                    '7). extra_button_4': None, '8). extra_button_5': None}
+        self.menu_buttons = {
+            '1). Show Trades': lambda: self.show_my_trades_window(parent), 
+            '2). Add Trade': lambda: self.show_add_trade_window(parent), 
+            '3). Search Trades': None, 
+            '4). Position Size Calc.': lambda: self.show_pos_size_calc_window(parent), 
+            '5). extra_button_2': None,
+            '6). extra_button_3': None,
+            '7). extra_button_4': None, 
+            '8). extra_button_5': None
+        }
         self.db = SQLiteDatabase()
         self.note_handler = NoteHandler()
         self.base_frame = tk.Frame(parent, width=geometry[0], height=geometry[1])
@@ -64,24 +69,21 @@ class MainWindow:
             df = pd.read_sql_query('SELECT * FROM trades', self.db.connection)
             self.windows_open['1). Show Trades'] = MyTradesWindow(parent=parent, dataframe=df, geometry='900x500', title='My Trades')
         try:
-            if self.windows_open['1). Show Trades'].is_showing():
-                self.windows_open['1). Show Trades'].focus_set()
-            else:
-                make_window()
-        except:
+            if self.windows_open['1). Show Trades'].window.state() == 'normal':
+                self.windows_open['1). Show Trades'].window.focus()
+        except Exception as e:
             make_window()
 
     def show_add_trade_window(self, parent):
         def make_window():
-            self.windows_open['2). Add Trade'] = AddTradeWindow(parent=parent, entries_list=SQLiteDatabase.trade_column_names[:1], 
+            self.windows_open['2). Add Trade'] = AddTradeWindow(parent=parent, entries_list=SQLiteDatabase.trade_column_names[1:], 
                                                                 db_con=self.db, geometry='390x520', title='Add Trade')
         try:
-            if self.windows_open['2). Add Trade'].is_showing():
-                self.windows_open['2). Add Trade'].focus_set()
-            else:
-                make_window()
-        except:
+            if self.windows_open['2). Add Trade'].window.state() == 'normal':
+                self.windows_open['2). Add Trade'].window.focus()
+        except Exception as e:
             make_window()
+
 
     # def show_search_trades_window(self, parent):
     #     def make_window():
@@ -99,13 +101,11 @@ class MainWindow:
         def make_window():
             self.windows_open['4). Position Size Calc'] = PositionSizingWindow(parent=parent, geometry='420x220', 
                                                                                 title='Position Size Calculator')
-            try:
-                if self.windows_open['4). Position Size Calc'].is_showing():
-                    self.windows_open['4). Position Size Calc'].focus_set()
-                else:
-                    make_window()
-            except:
-                make_window()
+        try:
+            if self.windows_open['4). Position Size Calc'].window.state() == 'normal':
+                self.windows_open['4). Position Size Calc'].window.focus()
+        except Exception as e:
+            make_window()
 
 
 if __name__ == '__main__':
