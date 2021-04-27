@@ -3,7 +3,8 @@
 This project is a work in progress!
 Currently this project is a graphical user interface built with Tkinter, with a SQLite database attatched to the backend.
 
-The purpose of this project is to provide a simple one-stop-shop helper for traders. Currently the features are as follows:
+The purpose of this project is to provide a simple one-stop-shop helper for traders. 
+Currently the features are as follows:
 - A database in which to store trades;
 - An interface allowing for new trades to be added to the database;
 - A table to display all trades recorded so far;
@@ -25,5 +26,5 @@ Features to be implemented:
 
 ## Usage
 
-Most of the program is pretty self explainatory, but it should be noted that **mainwindow.py** is the program entrace here!
+### Most of the program is pretty self explainatory, but it should be noted that **mainwindow.py** is the program entrace here!
  
