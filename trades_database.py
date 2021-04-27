@@ -87,5 +87,3 @@ item = {"counterparty": 'Binance', "base_asset": 'USDT', "asset": 'BTC', "risk_p
         "cost": 5500, "close_date": '23/03/2021', 'exit_price': 57000, 'exit_total': 5700, 
         "profit_loss": 200, "pct_gain_loss": 3.64, "strategy": 'basic'}
 
-my_db = SQLiteDatabase()
-my_db.print_all_rows()
