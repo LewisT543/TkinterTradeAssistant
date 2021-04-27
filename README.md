@@ -26,5 +26,5 @@ Features to be implemented:
 
 ## Usage
 
-### Most of the program is pretty self explainatory, but it should be noted that **mainwindow.py** is the program entrace here!
+### Most of the program is pretty self explainatory, but it should be noted that 'mainwindow.py' is the program entrace here!
  
